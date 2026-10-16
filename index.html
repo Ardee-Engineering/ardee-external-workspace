@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Ardee Shared Pages</title>
+<style>
+:root { --bg: #f4f6f8; --paper: #ffffff; --ink: #18212b; --muted: #5a6877; --rule: #d5dce3; --accent: #1d5c96; --bad: #9b3b33; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f151b; --paper: #151d25; --ink: #e2e8ee; --muted: #98a6b4; --rule: #2a3642; --accent: #7fb2e5; --bad: #ec8b82; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--ink);
+  font: 400 16px/1.5 "Segoe UI", system-ui, sans-serif; padding: 24px 16px; }
+form { background: var(--paper); border: 1px solid var(--rule); padding: 24px; width: min(100%, 380px); display: grid; gap: 12px; }
+h1 { font: 700 1.5rem "Arial Narrow", "Segoe UI", sans-serif; margin: 0; }
+p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+input { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); color: var(--ink); }
+button { font: inherit; font-weight: 600; padding: 8px 14px; border: 0; border-radius: 4px; background: var(--accent); color: var(--paper); cursor: pointer; }
+button:disabled { opacity: 0.6; }
+#err { color: var(--bad); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<form id="f">
+  <h1>Ardee Shared Pages</h1>
+  <p>Ardee Engineering. Enter the passcode you were given to open this page.</p>
+  <label for="pc">Passcode</label>
+  <input id="pc" type="password" autocomplete="current-password" required>
+  <button id="go" type="submit">Open</button>
+  <p id="err" role="alert" hidden>That passcode didn't open the page. Check it and try again.</p>
+</form>
+<script>
+const SALT = "rMtyvHZhRj5VtXPJW3G7+Q==", IV = "NQeRuIKyqyjBcBty", DATA = "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", ROUNDS = 600000;
+const u8 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function openWith(pass) {
+  const m = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+  const k = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: u8(SALT), iterations: ROUNDS, hash: "SHA-256" }, m,
+    { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: u8(IV) }, k, u8(DATA)));
+  try { sessionStorage.setItem("ardee-share-pass", pass); } catch (e) {}
+  document.open(); document.write(html); document.close();
+}
+document.getElementById("f").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const go = document.getElementById("go"), err = document.getElementById("err");
+  go.disabled = true; go.textContent = "Opening\u2026"; err.hidden = true;
+  if (!(window.crypto && crypto.subtle)) { err.textContent = "This browser can't open the page from here. Open the https link you were sent, in Chrome, Edge, Safari or Firefox."; err.hidden = false; go.disabled = false; go.textContent = "Open"; return; }
+  try { await openWith(document.getElementById("pc").value); }
+  catch (e) { err.textContent = "That passcode didn't open the page. Check it and try again."; err.hidden = false; go.disabled = false; go.textContent = "Open"; }
+});
+(async () => {
+  let saved = null; try { saved = sessionStorage.getItem("ardee-share-pass"); } catch (e) {}
+  if (saved && window.crypto && crypto.subtle) { try { await openWith(saved); } catch (e) { try { sessionStorage.removeItem("ardee-share-pass"); } catch (x) {} } }
+})();
+</script>
+</body>
+</html>
