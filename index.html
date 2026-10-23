@@ -6,75 +6,66 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Ardee Shared Pages</title>
 <style>
-:root { --bg: #f4f6f8; --paper: #ffffff; --ink: #18212b; --muted: #5a6877; --rule: #d5dce3; --accent: #1d5c96; --bad: #9b3b33; color-scheme: light; }
-@media (prefers-color-scheme: dark) { :root { --bg: #0f151b; --paper: #151d25; --ink: #e2e8ee; --muted: #98a6b4; --rule: #2a3642; --accent: #7fb2e5; --bad: #ec8b82; color-scheme: dark; } }
+:root { --bg: #f4f6f8; --paper: #ffffff; --ink: #18212b; --muted: #5a6877; --rule: #c9d2db; --accent: #1d5c96; --off: #a9b4bf; --bad: #9b3b33; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f151b; --paper: #151d25; --ink: #e2e8ee; --muted: #98a6b4; --rule: #33414e; --accent: #7fb2e5; --off: #3a4652; --bad: #ec8b82; color-scheme: dark; } }
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--ink);
-  font: 400 16px/1.5 "Segoe UI", system-ui, sans-serif; padding: 24px 16px; }
-form { background: var(--paper); border: 1px solid var(--rule); padding: 24px; width: min(100%, 380px); display: grid; gap: 12px; }
-h1 { font: 700 1.5rem "Arial Narrow", "Segoe UI", sans-serif; margin: 0; }
-p { margin: 0; color: var(--muted); font-size: 0.92rem; }
-input { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); color: var(--ink); }
-button { font: inherit; font-weight: 600; padding: 8px 14px; border: 0; border-radius: 4px; background: var(--accent); color: var(--paper); cursor: pointer; }
-button:disabled { opacity: 0.6; }
-#err { color: var(--bad); }
+  font: 400 16px/1.4 "Segoe UI", system-ui, sans-serif; padding: 24px 16px; }
+form { width: min(100%, 640px); display: grid; gap: 10px; }
+.brand { font-size: 0.85rem; color: var(--muted); }
+.row { display: flex; gap: 8px; align-items: end; }
+.field { flex: 1 1 0; min-width: 0; display: grid; gap: 4px; }
+label { font-size: 0.85rem; font-weight: 600; }
+input { width: 100%; min-width: 0; font: inherit; padding: 9px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); color: var(--ink); }
+button { flex: 0 0 auto; font: inherit; font-weight: 600; padding: 9px 18px; border: 1px solid var(--accent); border-radius: 4px; background: var(--accent); color: #fff; cursor: pointer; }
+button:disabled { background: var(--off); border-color: var(--off); color: #fff; cursor: default; }
+#err { margin: 0; color: var(--bad); font-size: 0.9rem; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 420px) { input { padding: 8px; } button { padding: 8px 12px; } }
 </style>
 </head>
 <body>
-<form id="f">
-  <h1>Ardee Shared Pages</h1>
-  <p>Ardee Engineering. Enter the passcode you were given to open this page.</p>
-  <label for="pc">Passcode</label>
-  <input id="pc" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" required>
-  <button id="go" type="submit">Open</button>
-  <p id="err" role="alert" hidden>That passcode didn't open the page. Check it and try again.</p>
-</form>
-<form id="n" hidden>
-  <h1>Who's this?</h1>
-  <p>Your name goes with anything you save here, so Ardee knows who it came from. Your browser remembers it; you can change it on the page.</p>
-  <label for="nm">Your name</label>
-  <input id="nm" type="text" autocomplete="name" placeholder="For example, Ravi (estimating)" required minlength="2" maxlength="60">
-  <button type="submit">Continue</button>
+<form id="f" autocomplete="off">
+  <div class="brand">Ardee Engineering · Ardee Shared Pages</div>
+  <div class="row">
+    <div class="field"><label for="nm">Name</label><input id="nm" type="text" autocomplete="name" maxlength="60"></div>
+    <div class="field"><label for="pc">Password</label><input id="pc" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+    <button id="go" type="submit" disabled>Open</button>
+  </div>
+  <p id="err" role="alert" hidden></p>
 </form>
 <script>
 // Everything inside one function, so nothing here clashes with the names the opened page uses (its DATA, PAGE …).
 (() => {
-const SALT = "Afgtb9/Ri6ERBeqWivHp0A==", IV = "CAWY5FfmAlyhz9fv", DATA = "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", ROUNDS = 600000;
+const SALT = "acCASIBNucp/Ay9n4AiBBQ==", IV = "msY75G7fP79WVeVg", DATA = "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", ROUNDS = 600000;
 const NAME_KEY = "ardee-share-name";
 const u8 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const nm = document.getElementById("nm"), pc = document.getElementById("pc"), go = document.getElementById("go"), err = document.getElementById("err");
+try { nm.value = localStorage.getItem(NAME_KEY) || ""; } catch (e) {}
+const ready = () => { go.disabled = !(nm.value.trim() && pc.value.trim()); };
+nm.addEventListener("input", ready); pc.addEventListener("input", ready); ready();
+(nm.value ? pc : nm).focus();
 function show(html) { document.open(); document.write(html); document.close(); }
-function askName(html) {
-  let name = ""; try { name = (localStorage.getItem(NAME_KEY) || "").trim(); } catch (e) {}
-  if (name.length >= 2) { show(html); return; }
-  document.getElementById("f").hidden = true;
-  const n = document.getElementById("n"); n.hidden = false; document.getElementById("nm").focus();
-  n.addEventListener("submit", ev => {
-    ev.preventDefault();
-    const v = document.getElementById("nm").value.trim();
-    if (v.length < 2) return;
-    try { localStorage.setItem(NAME_KEY, v); } catch (e) {}
-    show(html);
-  });
-}
 async function openWith(pass) {
   const m = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
   const k = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: u8(SALT), iterations: ROUNDS, hash: "SHA-256" }, m,
     { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
   const html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: u8(IV) }, k, u8(DATA)));
   try { sessionStorage.setItem("ardee-share-pass", pass); } catch (e) {}
-  askName(html);
+  show(html);
 }
 document.getElementById("f").addEventListener("submit", async ev => {
   ev.preventDefault();
-  const go = document.getElementById("go"), err = document.getElementById("err");
-  go.disabled = true; go.textContent = "Opening\u2026"; err.hidden = true;
-  if (!(window.crypto && crypto.subtle)) { err.textContent = "This browser can't open the page from here. Open the https link you were sent, in Chrome, Edge, Safari or Firefox."; err.hidden = false; go.disabled = false; go.textContent = "Open"; return; }
+  const name = nm.value.trim(), typed = pc.value;
+  if (!name || !typed.trim()) return;
+  try { localStorage.setItem(NAME_KEY, name); } catch (e) {}
+  go.disabled = true; go.textContent = "Opening…"; err.hidden = true;
+  const fail = m => { err.textContent = m; err.hidden = false; go.textContent = "Open"; ready(); };
+  if (!(window.crypto && crypto.subtle)) return fail("This browser can't open the page from here. Open the https link you were sent, in Chrome, Edge, Safari or Firefox.");
   // forgiving of a stray space or a capital typed by a phone keyboard: try as typed, then trimmed, then in small letters
-  const typed = document.getElementById("pc").value;
   const tries = [...new Set([typed, typed.trim(), typed.trim().toLowerCase()])].filter(Boolean);
   for (const t of tries) { try { await openWith(t); return; } catch (e) {} }
-  { err.textContent = "That passcode didn't open the page. Check it and try again."; err.hidden = false; go.disabled = false; go.textContent = "Open"; }
+  fail("That password didn't open the page. Check it and try again.");
 });
 (async () => {
   let saved = null; try { saved = sessionStorage.getItem("ardee-share-pass"); } catch (e) {}
